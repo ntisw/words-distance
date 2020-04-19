@@ -75,7 +75,7 @@ def write_file(words_distance,filename) :
     rows = transform_array_for_writefile(words_distance)     
         
     # writing to csv file  
-    with open(filename, 'w',encoding='utf-8') as csvfile:  
+    with open(filename, 'w',newline='',encoding='utf-8') as csvfile:  
         # creating a csv writer object  
         csvwriter = csv.writer(csvfile)  
             
@@ -139,7 +139,19 @@ def transform_array_for_writefile(words_distance) :
     
     return transform_array
 
-filename = "google_patong.csv"
-comments = transform_array("google", "patong")
-words_distance = find_word_distance(comments)
-write_file(words_distance,filename)
+def check_words_distance_and_write_file(file_name,place_name) :
+    
+    comments = transform_array(file_name, place_name)
+    words_distance = find_word_distance(comments)
+    pathfile = f"./result/{file_name}_{place_name}.csv"
+    write_file(words_distance,pathfile)
+
+def main () :
+    files_name = ["google","tripadvisor"]
+    places_name = ["patong","promthep","wat"]
+
+    for file_name in files_name :
+        for place_name in places_name :
+            check_words_distance_and_write_file(file_name,place_name)
+
+main()
