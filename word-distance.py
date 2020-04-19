@@ -64,15 +64,82 @@ def find_word_distance(comments, noun_and_adj=True, noun_and_verb=True, noun_and
         words_distance.append(dist_noun_and_verb)
     return words_distance
 
-def write_file(words_distance) :
-    max_len = 0
-    if len(words_distance[0]>= max_len) :
-        max_len = words_distance[0] 
+def write_file(words_distance,filename) :
+
+
+
+    # field names  
+    fields = ['noun', 'adj', 'distance', 'noun','adv','distance','noun','verb','distance']  
+        
+    # data rows of csv file  
+    rows = transform_array_for_writefile(words_distance)     
+        
+    # writing to csv file  
+    with open(filename, 'w',encoding='utf-8') as csvfile:  
+        # creating a csv writer object  
+        csvwriter = csv.writer(csvfile)  
+            
+        # writing the fields  
+        csvwriter.writerow(fields)  
+            
+        # writing the data rows  
+        csvwriter.writerows(rows) 
+
+
+
+
+
+def transform_array_for_writefile(words_distance) :
+    lens = [len(words_distance[0]),len(words_distance[1]),len(words_distance[2])]
+    max_len = max(lens)
+    transform_array = []
+    i = 0
+    while i < max_len :
+        row = []
+        noun_adj = ""
+        noun_adv = ""
+        noun_verb = ""
+        adv = " "
+        adj = " "
+        verb = " "
+        distance_adj = " "
+        distance_adv = " "
+        distance_verb = " "
+        if len(words_distance[0]) > i :
+            noun_adj = words_distance[0][i]["noun"]
+            adj = words_distance[0][i]["adj"]
+            distance_adj =  words_distance[0][i]["distance"]
+
+        if len(words_distance[1]) > i :
+            noun_adv = words_distance[1][i]["noun"]
+            adv = words_distance[1][i]["adv"]
+            distance_adv = words_distance[1][i]["distance"]
+
+        if len(words_distance[2]) > i  :
+            noun_verb = words_distance[2][i]["noun"]
+            verb = words_distance[2][i]["verb"]
+            distance_verb = words_distance[2][i]["distance"]
+
+        row.append(noun_adj)    
+        row.append(adj)
+        row.append(distance_adj)
+        row.append(noun_adv)
+        row.append(adv)
+        row.append(distance_adv)
+        row.append(noun_verb)
+        row.append(verb)
+        row.append(distance_verb)
+        transform_array.append(row)
+        i+=1
+
+    print(f"MAX LEN = {max_len}")
     print(len(words_distance[0]))
     print(len(words_distance[1]))
     print(len(words_distance[2]))
+    
+    return transform_array
 
-
+filename = "google_patong.csv"
 comments = transform_array("google", "patong")
 words_distance = find_word_distance(comments)
-write_file(words_distance)
+write_file(words_distance,filename)
